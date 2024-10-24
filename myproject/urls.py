@@ -17,8 +17,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from home.views import *
+from recipe_add_project.views import *
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    
+    path('recipes/', recipe_view, name="recipes"),
+    path('delete/<int:recipe_id>/', delete_recipe, name='delete_recipe'),
+
+
     path('success-page', success_page),
     path('', home, name="home"),
     path('about', about, name="about"),
