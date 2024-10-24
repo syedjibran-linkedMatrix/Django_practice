@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Submission Form</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center align-items-center vh-100">
+            <div class="col-md-6">
+                <h2 class="text-center mb-4">Submit Your Recipe</h2>
+                <form class="shadow p-4 rounded mb-5" style="background-color: #f9f9f9;" 
+                      action="{% url 'recipes' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="recipe_name" class="form-label fw-bold">Recipe Name</label>
+                        <input type="text" class="form-control" id="recipe_name" name="recipe_name" 
+                               placeholder="Enter recipe name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="recipe_description" class="form-label fw-bold">Recipe Description</label>
+                        <textarea class="form-control" id="recipe_description" name="recipe_description" 
+                                  rows="4" placeholder="Write a brief description..." required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="recipe_image" class="form-label fw-bold">Recipe Image</label>
+                        <input type="file" class="form-control" id="recipe_image" name="recipe_image" 
+                               accept="image/*" required>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+
+                <h3 class="text-center mb-3">Submitted Recipes</h3>
+                <table class="table table-bordered table-hover shadow">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Image</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for recipe in recipes %}
+                        <tr>
+                            <td>{{ recipe.name }}</td>
+                            <td>{{ recipe.description }}</td>
+                            <td>
+                                <img src="{{ recipe.image.url }}" alt="{{ recipe.name }}" 
+                                     class="img-fluid" style="max-width: 100px;">
+                            </td>
+                            <td>
+                                <form action="{% url 'delete_recipe' recipe.id %}" method="post" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center">No recipes submitted yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
